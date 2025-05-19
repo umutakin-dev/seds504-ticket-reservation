@@ -1,4 +1,3 @@
-// src/main/java/com/myorg/ticket/model/Event.java
 package com.myorg.ticket.model;
 
 import java.time.LocalDateTime;
@@ -7,18 +6,65 @@ import java.util.List;
 import java.util.UUID;
 
 public class Event {
-    private UUID id;
-    private String name;
-    private LocalDateTime dateTime;
-    private String location;
-    private final List<TicketCategory> categories = new ArrayList<>();
+    private final UUID id;
+    private final String name;
+    private final LocalDateTime dateTime;
+    private final String location;
+    private final List<TicketCategory> categories;
 
-    public Event(String name, LocalDateTime dateTime, String location) {
-        this.id = UUID.randomUUID();
-        this.name = name;
-        this.dateTime = dateTime;
-        this.location = location;
+    private Event(Builder b) {
+        this.id = (b.id != null) ? b.id : UUID.randomUUID();
+        this.name = b.name;
+        this.dateTime = b.dateTime;
+        this.location = b.location;
+        this.categories = List.copyOf(b.categories);
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private UUID id;
+        private String name;
+        private LocalDateTime dateTime;
+        private String location;
+        private final List<TicketCategory> categories = new ArrayList<>();
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder dateTime(LocalDateTime dateTime) {
+            this.dateTime = dateTime;
+            return this;
+        }
+
+        public Builder location(String location) {
+            this.location = location;
+            return this;
+        }
+
+        public Builder addCategory(String catName, double price, int available) {
+            this.categories.add(new TicketCategory(catName, price, available));
+            return this;
+        }
+
+        public Builder id(String id) {
+            this.id = UUID.fromString(id);
+            return this;
+        }
+
+        public Event build() {
+            if (name == null || dateTime == null || location == null) {
+                throw new IllegalStateException("Event must have name, dateTime, and location");
+            }
+            return new Event(this);
+        }
+    }
+
+    // ─── Getters ────────────────────────────────────────────────────────────────
 
     public UUID getId() {
         return id;
@@ -28,36 +74,15 @@ public class Event {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public LocalDateTime getDateTime() {
         return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public List<TicketCategory> getCategories() {
         return categories;
-    }
-
-    public void addCategory(TicketCategory category) {
-        categories.add(category);
-    }
-
-    public static Event withId(String id, Event e) {
-        e.id = UUID.fromString(id); // make id non-final or use reflection/builder
-        return e;
     }
 }

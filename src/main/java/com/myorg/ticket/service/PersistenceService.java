@@ -94,29 +94,33 @@ public class PersistenceService {
     }
 
     public List<Event> loadEvents() throws SQLException {
-        String sql = "SELECT id, name, date_time, location FROM events";
+        String sql = "SELECT id,name,date_time,location FROM events";
         List<Event> list = new ArrayList<>();
         try (Connection c = getConnection();
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                Event e = new Event(
-                        rs.getString("name"),
-                        LocalDateTime.parse(rs.getString("date_time")),
-                        rs.getString("location"));
-                // overwrite generated id with persisted one:
-                e = Event.withId(rs.getString("id"), e);
-                // load categories
-                e.getCategories().addAll(loadCategories(e.getId().toString()));
-                list.add(e);
+                // build event with the saved ID
+                var builder = Event.builder()
+                        .id(rs.getString("id"))
+                        .name(rs.getString("name"))
+                        .dateTime(LocalDateTime.parse(rs.getString("date_time")))
+                        .location(rs.getString("location"));
+
+                // load its categories and add them
+                for (TicketCategory cat : loadCategories(rs.getString("id"))) {
+                    builder.addCategory(cat.getName(), cat.getPrice(), cat.getAvailable());
+                }
+
+                list.add(builder.build());
             }
         }
         return list;
     }
 
     public Event loadEventById(String id) throws SQLException {
-        String sql = "SELECT name, date_time, location FROM events WHERE id = ?";
+        String sql = "SELECT name,date_time,location FROM events WHERE id=?";
         try (Connection c = getConnection();
                 PreparedStatement p = c.prepareStatement(sql)) {
 
@@ -124,13 +128,17 @@ public class PersistenceService {
             try (ResultSet rs = p.executeQuery()) {
                 if (!rs.next())
                     return null;
-                Event e = new Event(
-                        rs.getString("name"),
-                        LocalDateTime.parse(rs.getString("date_time")),
-                        rs.getString("location"));
-                e = Event.withId(id, e);
-                e.getCategories().addAll(loadCategories(id));
-                return e;
+
+                var builder = Event.builder()
+                        .id(id)
+                        .name(rs.getString("name"))
+                        .dateTime(LocalDateTime.parse(rs.getString("date_time")))
+                        .location(rs.getString("location"));
+
+                for (TicketCategory cat : loadCategories(id)) {
+                    builder.addCategory(cat.getName(), cat.getPrice(), cat.getAvailable());
+                }
+                return builder.build();
             }
         }
     }
