@@ -1,3 +1,4 @@
+// src/main/java/com/myorg/ticket/ui/Command.java
 package com.myorg.ticket.ui;
 
 /** A menu action in the UI. */

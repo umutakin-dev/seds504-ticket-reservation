@@ -1,3 +1,5 @@
+// src/main/java/com/myorg/ticket/ui/ReserveTicketsCommand.java
+
 package com.myorg.ticket.ui;
 
 import com.myorg.ticket.model.Reservation;
@@ -31,10 +33,13 @@ public class ReserveTicketsCommand implements Command {
             String cat = ui.prompt("Category name: ");
             int qty = ui.promptInt("Quantity: ");
 
-            Reservation r = svc.makeReservation(eventId, cat, qty, null);
-            ui.println("Reserved! ID = " + r.getId());
+            // UPDATED LINE: Pass the current user from the UI
+            Reservation r = svc.makeReservation(eventId, cat, qty, ui.getCurrentUser());
+
+            ui.println("Reserved! Your Reservation ID = " + r.getId());
         } catch (Exception ex) {
             ui.println("Error reserving tickets: " + ex.getMessage());
         }
     }
+
 }

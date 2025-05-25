@@ -5,6 +5,7 @@ com\myorg\ticket\App.class
 com\myorg\ticket\ui\Command.class
 com\myorg\ticket\model\User.class
 com\myorg\ticket\ui\ReserveTicketsCommand.class
+com\myorg\ticket\ui\ListMyReservationsCommand.class
 com\myorg\ticket\ui\ViewReservationCommand.class
 com\myorg\ticket\model\TicketCategory.class
 com\myorg\ticket\model\Event$Builder.class
@@ -14,3 +15,4 @@ com\myorg\ticket\service\EventService.class
 com\myorg\ticket\ui\ConsoleUI.class
 com\myorg\ticket\ui\SearchEventsCommand.class
 com\myorg\ticket\service\PersistenceService.class
+com\myorg\ticket\service\UserService.class

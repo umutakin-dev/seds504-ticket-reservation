@@ -3,7 +3,7 @@ package com.myorg.ticket.service;
 import com.myorg.ticket.model.Event;
 import com.myorg.ticket.model.Reservation;
 import com.myorg.ticket.model.TicketCategory;
-// import com.myorg.ticket.model.User;
+import com.myorg.ticket.model.User; // Import the User model
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -19,47 +19,46 @@ public class PersistenceService {
         try (Connection conn = DriverManager.getConnection(URL);
                 Statement st = conn.createStatement()) {
 
-            // Events table
+            // Events table (no change)
             st.execute("""
                     CREATE TABLE IF NOT EXISTS events (
-                      id TEXT PRIMARY KEY,
-                      name TEXT NOT NULL,
-                      date_time TEXT NOT NULL,
-                      location TEXT NOT NULL
+                      id TEXT PRIMARY KEY, name TEXT NOT NULL, date_time TEXT NOT NULL, location TEXT NOT NULL
                     )
                     """);
 
-            // Ticket categories
+            // Ticket categories (no change)
+            st.execute(
+                    """
+                            CREATE TABLE IF NOT EXISTS ticket_categories (
+                              event_id TEXT NOT NULL, category_name TEXT NOT NULL, price REAL NOT NULL, available INTEGER NOT NULL,
+                              PRIMARY KEY (event_id, category_name), FOREIGN KEY(event_id) REFERENCES events(id)
+                            )
+                            """);
+
+            // Reservations (no change)
+            st.execute(
+                    """
+                            CREATE TABLE IF NOT EXISTS reservations (
+                              id TEXT PRIMARY KEY, event_id TEXT NOT NULL, category_name TEXT NOT NULL, quantity INTEGER NOT NULL, reserved_at TEXT NOT NULL,
+                              FOREIGN KEY(event_id, category_name) REFERENCES ticket_categories(event_id, category_name)
+                            )
+                            """);
+
+            // NEW: Users table
             st.execute("""
-                    CREATE TABLE IF NOT EXISTS ticket_categories (
-                      event_id TEXT NOT NULL,
-                      category_name TEXT NOT NULL,
-                      price REAL NOT NULL,
-                      available INTEGER NOT NULL,
-                      PRIMARY KEY (event_id, category_name),
-                      FOREIGN KEY(event_id) REFERENCES events(id)
-                    )
-                    """);
-
-            // Reservations
-            st.execute("""
-                    CREATE TABLE IF NOT EXISTS reservations (
+                    CREATE TABLE IF NOT EXISTS users (
                       id TEXT PRIMARY KEY,
-                      event_id TEXT NOT NULL,
-                      category_name TEXT NOT NULL,
-                      quantity INTEGER NOT NULL,
-                      reserved_at TEXT NOT NULL,
-                      FOREIGN KEY(event_id, category_name)
-                        REFERENCES ticket_categories(event_id, category_name)
+                      username TEXT NOT NULL UNIQUE
                     )
                     """);
 
-            // User → Reservation link table
+            // User → Reservation link table (UPDATED with foreign key to users)
             st.execute("""
                     CREATE TABLE IF NOT EXISTS user_reservations (
                       user_id TEXT NOT NULL,
                       reservation_id TEXT NOT NULL,
                       PRIMARY KEY (user_id, reservation_id),
+                      FOREIGN KEY(user_id) REFERENCES users(id),
                       FOREIGN KEY(reservation_id) REFERENCES reservations(id)
                     )
                     """);
@@ -145,10 +144,11 @@ public class PersistenceService {
 
     // -- TicketCategory CRUD ----------------------------------------------
 
-    public void saveCategory(String eventId, String categoryName, double price, int available) throws SQLException {
+    public void saveCategory(String eventId, String categoryName, double price,
+            int available) throws SQLException {
         String sql = """
                 INSERT OR REPLACE INTO ticket_categories
-                  (event_id, category_name, price, available)
+                (event_id, category_name, price, available)
                 VALUES(?,?,?,?)
                 """;
         try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -163,8 +163,8 @@ public class PersistenceService {
     public void updateCategory(String eventId, String categoryName, int available) throws SQLException {
         String sql = """
                 UPDATE ticket_categories
-                   SET available = ?
-                 WHERE event_id = ? AND category_name = ?
+                SET available = ?
+                WHERE event_id = ? AND category_name = ?
                 """;
         try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
             p.setInt(1, available);
@@ -177,8 +177,8 @@ public class PersistenceService {
     public List<TicketCategory> loadCategories(String eventId) throws SQLException {
         String sql = """
                 SELECT category_name, price, available
-                  FROM ticket_categories
-                 WHERE event_id = ?
+                FROM ticket_categories
+                WHERE event_id = ?
                 """;
         List<TicketCategory> cats = new ArrayList<>();
         try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -204,7 +204,7 @@ public class PersistenceService {
             String reservedAt) throws SQLException {
         String sql = """
                 INSERT OR REPLACE INTO reservations
-                  (id, event_id, category_name, quantity, reserved_at)
+                (id, event_id, category_name, quantity, reserved_at)
                 VALUES(?,?,?,?,?)
                 """;
         try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -220,8 +220,8 @@ public class PersistenceService {
     public Reservation loadReservationById(String id) throws SQLException {
         String sql = """
                 SELECT event_id, category_name, quantity, reserved_at
-                  FROM reservations
-                 WHERE id = ?
+                FROM reservations
+                WHERE id = ?
                 """;
         try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
             p.setString(1, id);
@@ -232,7 +232,8 @@ public class PersistenceService {
                         UUID.fromString(rs.getString("event_id")),
                         rs.getString("category_name"),
                         rs.getInt("quantity"));
-                return Reservation.withId(id, LocalDateTime.parse(rs.getString("reserved_at")), r);
+                return Reservation.withId(id,
+                        LocalDateTime.parse(rs.getString("reserved_at")), r);
             }
         }
     }
@@ -240,9 +241,9 @@ public class PersistenceService {
     public List<Reservation> loadReservationsByUser(String userId) throws SQLException {
         String sql = """
                 SELECT r.id, r.event_id, r.category_name, r.quantity, r.reserved_at
-                  FROM reservations r
-                  JOIN user_reservations ur ON r.id = ur.reservation_id
-                 WHERE ur.user_id = ?
+                FROM reservations r
+                JOIN user_reservations ur ON r.id = ur.reservation_id
+                WHERE ur.user_id = ?
                 """;
         List<Reservation> list = new ArrayList<>();
         try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
@@ -264,9 +265,49 @@ public class PersistenceService {
         return list;
     }
 
+    // -- User CRUD --------------------------------------------------------
+
+    public void saveUser(User user) throws SQLException {
+        String sql = "INSERT INTO users(id, username) VALUES(?,?)";
+        try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
+            p.setString(1, user.getId().toString());
+            p.setString(2, user.getUsername());
+            p.executeUpdate();
+        }
+    }
+
+    public User findUserByUsername(String username) throws SQLException {
+        String sql = "SELECT id FROM users WHERE username = ?";
+        try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
+            p.setString(1, username);
+            try (ResultSet rs = p.executeQuery()) {
+                if (!rs.next()) {
+                    return null; // No user found
+                }
+                UUID userId = UUID.fromString(rs.getString("id"));
+                return new User(userId, username);
+            }
+        }
+    }
+
+    public List<UUID> loadReservationIdsForUser(String userId) throws SQLException {
+        String sql = "SELECT reservation_id FROM user_reservations WHERE user_id = ?";
+        List<UUID> ids = new ArrayList<>();
+        try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(sql)) {
+            p.setString(1, userId);
+            try (ResultSet rs = p.executeQuery()) {
+                while (rs.next()) {
+                    ids.add(UUID.fromString(rs.getString("reservation_id")));
+                }
+            }
+        }
+        return ids;
+    }
+
     // -- User ↔ Reservation link ------------------------------------------
 
-    public void saveUserReservations(String userId, List<UUID> reservationIds) throws SQLException {
+    public void saveUserReservations(String userId, List<UUID> reservationIds)
+            throws SQLException {
         // delete old links
         try (Connection c = getConnection();
                 PreparedStatement del = c.prepareStatement(
@@ -286,4 +327,5 @@ public class PersistenceService {
             p.executeBatch();
         }
     }
+
 }

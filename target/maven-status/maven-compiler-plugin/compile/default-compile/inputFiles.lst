@@ -6,10 +6,12 @@ C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reser
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\service\EventService.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\service\PersistenceService.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\service\ReservationService.java
+C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\service\UserService.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\ui\Command.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\ui\ConsoleUI.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\ui\CreateEventCommand.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\ui\ExitCommand.java
+C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\ui\ListMyReservationsCommand.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\ui\ReserveTicketsCommand.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\ui\SearchEventsCommand.java
 C:\Users\ydran\workspace\seds\seds504-software-construction\seds504-ticket-reservation\src\main\java\com\myorg\ticket\ui\ViewReservationCommand.java

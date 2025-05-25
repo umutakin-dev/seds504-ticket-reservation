@@ -1,3 +1,4 @@
+// src/main/java/com/myorg/ticket/model/Event.java
 package com.myorg.ticket.model;
 
 import java.time.LocalDateTime;

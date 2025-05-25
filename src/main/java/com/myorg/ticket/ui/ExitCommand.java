@@ -1,3 +1,4 @@
+// src/main/java/com/myorg/ticket/ui/ExitCommand.java
 package com.myorg.ticket.ui;
 
 /** Stops the loop in ConsoleUI. */

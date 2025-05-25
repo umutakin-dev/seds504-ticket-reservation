@@ -1,3 +1,4 @@
+// src/main/java/com/myorg/ticket/ui/ViewReservationCommand.java
 package com.myorg.ticket.ui;
 
 import com.myorg.ticket.model.Reservation;

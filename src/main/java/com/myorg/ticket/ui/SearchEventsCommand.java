@@ -1,3 +1,4 @@
+// src/main/java/com/myorg/ticket/ui/SearchEventsCommand.java
 package com.myorg.ticket.ui;
 
 import com.myorg.ticket.model.Event;
