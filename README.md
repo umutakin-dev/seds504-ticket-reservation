@@ -78,4 +78,4 @@ Concurrency: if you imagine multiple threads booking at once, introduce connecti
 
 ### 11. Unit tests for your new structure
 
-### 12. Cancellation flow (restore tickets)
+### ~~12. Cancellation flow (restore tickets)~~
