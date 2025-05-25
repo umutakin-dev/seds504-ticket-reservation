@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class User {
     private final UUID id;
-    private String username; // can be null or empty for “guest”
+    private String username; // can be null or empty for "guest"
     private final List<UUID> pastReservations = new ArrayList<>();
 
     public User(String username) {
