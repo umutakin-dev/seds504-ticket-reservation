@@ -26,7 +26,8 @@ public class App {
         ui.register(new SearchEventsCommand(ui, eventSvc));
         ui.register(new ReserveTicketsCommand(ui, resSvc));
         ui.register(new ViewReservationCommand(ui, resSvc));
-        ui.register(new ListMyReservationsCommand(ui, resSvc)); // New command
+        ui.register(new ListMyReservationsCommand(ui, resSvc));
+        ui.register(new CancelReservationCommand(ui, resSvc));
         ui.register(new ExitCommand(ui));
 
         // 5) Start the loop

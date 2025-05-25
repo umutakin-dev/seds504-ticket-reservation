@@ -265,6 +265,22 @@ public class PersistenceService {
         return list;
     }
 
+    public void deleteReservation(String reservationId) throws SQLException {
+        // Must delete from the linking table first due to foreign key constraints
+        String deleteLinkSql = "DELETE FROM user_reservations WHERE reservation_id = ?";
+        try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(deleteLinkSql)) {
+            p.setString(1, reservationId);
+            p.executeUpdate();
+        }
+
+        // Then delete the reservation itself
+        String deleteReservationSql = "DELETE FROM reservations WHERE id = ?";
+        try (Connection c = getConnection(); PreparedStatement p = c.prepareStatement(deleteReservationSql)) {
+            p.setString(1, reservationId);
+            p.executeUpdate();
+        }
+    }
+
     // -- User CRUD --------------------------------------------------------
 
     public void saveUser(User user) throws SQLException {

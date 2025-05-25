@@ -74,4 +74,44 @@ public class ReservationService {
             throw new RuntimeException("Error loading reservation", e);
         }
     }
+
+    /**
+     * 
+     * Cancels a reservation, restoring ticket counts.
+     * 
+     * @param reservationId The ID of the reservation to cancel.
+     * 
+     * @return true if cancellation was successful.
+     */
+    public boolean cancelReservation(UUID reservationId) {
+        try {
+            // 1. Find the reservation
+            Reservation res = db.loadReservationById(reservationId.toString());
+            if (res == null) {
+                throw new IllegalArgumentException("Reservation not found.");
+            }
+
+            // 2. Find the corresponding event and ticket category
+            Event evt = eventSvc.findById(res.getEventId());
+            TicketCategory cat = evt.getCategories().stream()
+                    .filter(c -> c.getName().equals(res.getCategoryName()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException(
+                            "Could not find matching ticket category for this old reservation."));
+
+            // 3. Restore the ticket count
+            cat.restore(res.getQuantity());
+
+            // 4. Persist the updated ticket availability
+            db.updateCategory(evt.getId().toString(), cat.getName(), cat.getAvailable());
+
+            // 5. Delete the reservation from the database
+            db.deleteReservation(reservationId.toString());
+
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException("DB error during cancellation", e);
+        }
+    }
+
 }

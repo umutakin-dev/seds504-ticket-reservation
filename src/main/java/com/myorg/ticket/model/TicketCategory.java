@@ -24,17 +24,42 @@ public class TicketCategory {
         return available;
     }
 
+    // /**
+    // * Attempt to reserve `quantity` tickets.
+    // *
+    // * @return true if enough tickets were available (and decremented), false
+    // * otherwise.
+    // */
+    // public boolean reserve(int quantity) {
+    // if (quantity <= available) {
+    // available -= quantity;
+    // return true;
+    // }
+    // return false;
+    // }
+
     /**
-     * Attempt to reserve `quantity` tickets.
+     * Attempt to reserve quantity tickets.
      * 
-     * @return true if enough tickets were available (and decremented), false
-     *         otherwise.
+     * @return true if enough tickets were available, false otherwise.
      */
     public boolean reserve(int quantity) {
-        if (quantity <= available) {
+
+        if (quantity > 0 && quantity <= available) {
             available -= quantity;
             return true;
         }
         return false;
     }
+
+    /**
+     * 
+     * Restores quantity tickets to the category (e.g. from a cancellation).
+     */
+    public void restore(int quantity) {
+        if (quantity > 0) {
+            available += quantity;
+        }
+    }
+
 }
