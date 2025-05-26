@@ -39,7 +39,7 @@ Reusable menu code: pull your while(running)…switch logic into a Menu helper c
 Sign up / log in: ask for a username (and optional password) at startup, persist users in a new users table.
 Associate reservations: when logged in, automatically link new bookings to the user—and let them List My Reservations instead of entering an ID.
 
-### 3. ~~Reservation Management~~
+### 3. Reservation Management
 
 Cancel or modify: add menu options to cancel a reservation (which restores ticket availability) or change quantity.
 List all reservations: for admins or guests, a “View all reservations” report.
@@ -80,8 +80,6 @@ Builder pattern: for constructing Event objects, especially as categories grow.
 Web interface: swap the console for a tiny Spark Java or Spring Boot app with REST endpoints.
 Concurrency: if you imagine multiple threads booking at once, introduce connection pooling (HikariCP) and synchronize ticket updates.
 
-### 11. Selection Menu for Events
+### 11. Unit tests for your new structure
 
-We are copying and pasting event uuids etc for event selection and ticket reservation.
-Instead, we will use a selection menu that will display the current events under a menu.
-The user will select an item from that menu instead of copying and pasting the uuid.
+### ~~12. Cancellation flow (restore tickets)~~
