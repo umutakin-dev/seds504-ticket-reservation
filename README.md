@@ -22,6 +22,10 @@ mvn clean compile
 mvn exec:java
 ```
 
+## UML DIAGRAM
+
+![Uploading image.png…]()
+
 ## ROADMAP
 
 ### 1. Harden the Console UI & I/O
