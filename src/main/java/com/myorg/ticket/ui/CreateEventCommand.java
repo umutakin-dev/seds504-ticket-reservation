@@ -42,7 +42,7 @@ public class CreateEventCommand implements Command {
             }
 
             var e = builder.build();
-            var savedEvent = eventSvc.createEvent(e); // Kaydedilmiş event'i al
+            var savedEvent = eventSvc.createEvent(e);
             ui.println("Created event with ID: " + savedEvent.getEventId());
         } catch (Exception ex) {
             ui.println("Error creating event: " + ex.getMessage());

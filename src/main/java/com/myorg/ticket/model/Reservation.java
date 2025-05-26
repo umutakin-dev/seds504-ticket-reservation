@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Reservation {
     private UUID id;
-    private final int eventId; // Artık int!
+    private final int eventId;
     private final String categoryName;
     private final int quantity;
     private final LocalDateTime reservedAt;

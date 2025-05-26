@@ -17,7 +17,6 @@ public class EventService {
             // Save event and get the one with generated eventId
             Event savedEvent = db.saveEvent(event);
 
-            // Kategorileri kaydet
             for (TicketCategory cat : event.getCategories()) {
                 db.saveCategory(
                         savedEvent.getEventId(),

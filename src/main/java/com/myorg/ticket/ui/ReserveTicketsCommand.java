@@ -25,11 +25,10 @@ public class ReserveTicketsCommand implements Command {
     @Override
     public void execute() {
         try {
-            int eventId = ui.promptInt("Event ID: "); // UUID değil, int!
+            int eventId = ui.promptInt("Event ID: ");
             String cat = ui.prompt("Category name: ");
             int qty = ui.promptInt("Quantity: ");
 
-            // Güncellenmiş: int eventId gönderiyoruz!
             Reservation r = svc.makeReservation(eventId, cat, qty, ui.getCurrentUser());
 
             ui.println("Reserved! Your Reservation ID = " + r.getId());

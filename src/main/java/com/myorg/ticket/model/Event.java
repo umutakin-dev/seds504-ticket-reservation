@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class Event {
-    private final int eventId; // Otomatik artan int id
-    private final UUID uuid;   // Eskisi gibi dursun
+    private final int eventId;
+    private final UUID uuid;
     private final String name;
     private final LocalDateTime dateTime;
     private final String location;
@@ -27,7 +27,7 @@ public class Event {
     }
 
     public static class Builder {
-        private int eventId = 0; // Varsayılan 0, DB atayınca değişir
+        private int eventId = 0;
         private UUID uuid;
         private String name;
         private LocalDateTime dateTime;

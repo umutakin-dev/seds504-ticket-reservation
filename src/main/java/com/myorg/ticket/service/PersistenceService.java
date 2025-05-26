@@ -104,7 +104,6 @@ public class PersistenceService {
                 if (generatedKeys.next()) {
                     int eventId = generatedKeys.getInt(1);
 
-                    // Kategorileri de kaydet
                     for (TicketCategory cat : event.getCategories()) {
                         saveCategory(eventId, cat.getName(), cat.getPrice(), cat.getAvailable());
                     }
@@ -143,7 +142,6 @@ public class PersistenceService {
                         .dateTime(dateTime)
                         .location(location);
 
-                // Kategorileri yükle
                 for (TicketCategory cat : loadCategories(eventId)) {
                     builder.addCategory(cat.getName(), cat.getPrice(), cat.getAvailable());
                 }
