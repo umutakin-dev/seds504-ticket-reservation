@@ -24,7 +24,7 @@ mvn exec:java
 
 ## UML DIAGRAM
 
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/9e0ab0de-f730-495d-9f50-fe9723df85b6)
 
 ## ROADMAP
 
