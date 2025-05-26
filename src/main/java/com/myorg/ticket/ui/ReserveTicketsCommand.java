@@ -1,11 +1,7 @@
-// src/main/java/com/myorg/ticket/ui/ReserveTicketsCommand.java
-
 package com.myorg.ticket.ui;
 
 import com.myorg.ticket.model.Reservation;
 import com.myorg.ticket.service.ReservationService;
-
-import java.util.UUID;
 
 public class ReserveTicketsCommand implements Command {
     private final ConsoleUI ui;
@@ -29,11 +25,11 @@ public class ReserveTicketsCommand implements Command {
     @Override
     public void execute() {
         try {
-            UUID eventId = UUID.fromString(ui.prompt("Event ID: "));
+            int eventId = ui.promptInt("Event ID: "); // UUID değil, int!
             String cat = ui.prompt("Category name: ");
             int qty = ui.promptInt("Quantity: ");
 
-            // UPDATED LINE: Pass the current user from the UI
+            // Güncellenmiş: int eventId gönderiyoruz!
             Reservation r = svc.makeReservation(eventId, cat, qty, ui.getCurrentUser());
 
             ui.println("Reserved! Your Reservation ID = " + r.getId());
