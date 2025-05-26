@@ -29,7 +29,7 @@ public class ViewReservationCommandTest {
     @Test
     void testReservationFoundPrintsDetails() {
         UUID rid = UUID.randomUUID();
-        Reservation reservation = new Reservation(UUID.randomUUID(), "VIP", 2);
+        Reservation reservation = new Reservation(42, "VIP", 2);
         Reservation.withId(rid.toString(), LocalDateTime.of(2025, 1, 1, 12, 0), reservation);
 
         when(mockUI.prompt("Reservation ID: ")).thenReturn(rid.toString());

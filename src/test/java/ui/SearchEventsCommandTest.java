@@ -1,7 +1,6 @@
 package ui;
 
 import com.myorg.ticket.model.Event;
-import com.myorg.ticket.model.TicketCategory;
 import com.myorg.ticket.service.EventService;
 import com.myorg.ticket.ui.ConsoleUI;
 import com.myorg.ticket.ui.SearchEventsCommand;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 

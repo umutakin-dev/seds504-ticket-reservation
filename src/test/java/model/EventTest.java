@@ -27,7 +27,8 @@ public class EventTest {
             .addCategory("Regular", 100.0, 300)
             .build();
 
-        assertNotNull(event.getId(), "Event ID should be automatically generated");
+        assertNotNull(event.getUuid(), "UUID should be automatically generated");
+        assertEquals(0, event.getEventId(), "Event ID should be 0 by default");
         assertEquals(name, event.getName());
         assertEquals(dateTime, event.getDateTime());
         assertEquals(location, event.getLocation());
@@ -37,21 +38,21 @@ public class EventTest {
 
         TicketCategory vip = categories.get(0);
         assertEquals("VIP", vip.getName());
-        assertEquals(250.0, vip.getPrice());
+        assertEquals(250.0, vip.getPrice(), 0.0001);
         assertEquals(100, vip.getAvailable());
     }
 
     @Test
-    void testBuildEventWithCustomId() {
-        UUID expectedId = UUID.randomUUID();
+    void testBuildEventWithCustomUuid() {
+        UUID expectedUuid = UUID.randomUUID();
         Event event = Event.builder()
-            .id(expectedId.toString())
+            .uuid(expectedUuid)
             .name("Tech Conference")
             .dateTime(LocalDateTime.now())
             .location("Berlin")
             .build();
 
-        assertEquals(expectedId, event.getId(), "Event ID should match provided ID");
+        assertEquals(expectedUuid, event.getUuid(), "UUID should match provided UUID");
     }
 
     @Test
@@ -94,6 +95,7 @@ public class EventTest {
             .build();
 
         List<TicketCategory> categories = event.getCategories();
+
         assertThrows(UnsupportedOperationException.class, () -> {
             categories.add(new TicketCategory("Extra", 2.0, 2));
         }, "Category list should be immutable");
