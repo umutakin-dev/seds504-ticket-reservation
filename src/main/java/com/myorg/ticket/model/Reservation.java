@@ -1,4 +1,3 @@
-// src/main/java/com/myorg/ticket/model/Reservation.java
 package com.myorg.ticket.model;
 
 import java.time.LocalDateTime;
@@ -6,12 +5,12 @@ import java.util.UUID;
 
 public class Reservation {
     private UUID id;
-    private final UUID eventId;
+    private final int eventId; // Artık int!
     private final String categoryName;
     private final int quantity;
     private final LocalDateTime reservedAt;
 
-    public Reservation(UUID eventId, String categoryName, int quantity) {
+    public Reservation(int eventId, String categoryName, int quantity) {
         this.id = UUID.randomUUID();
         this.eventId = eventId;
         this.categoryName = categoryName;
@@ -23,7 +22,7 @@ public class Reservation {
         return id;
     }
 
-    public UUID getEventId() {
+    public int getEventId() {
         return eventId;
     }
 

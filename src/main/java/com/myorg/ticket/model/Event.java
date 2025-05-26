@@ -1,4 +1,3 @@
-// src/main/java/com/myorg/ticket/model/Event.java
 package com.myorg.ticket.model;
 
 import java.time.LocalDateTime;
@@ -7,14 +6,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class Event {
-    private final UUID id;
+    private final int eventId; // Otomatik artan int id
+    private final UUID uuid;   // Eskisi gibi dursun
     private final String name;
     private final LocalDateTime dateTime;
     private final String location;
     private final List<TicketCategory> categories;
 
     private Event(Builder b) {
-        this.id = (b.id != null) ? b.id : UUID.randomUUID();
+        this.eventId = b.eventId;
+        this.uuid = (b.uuid != null) ? b.uuid : UUID.randomUUID();
         this.name = b.name;
         this.dateTime = b.dateTime;
         this.location = b.location;
@@ -26,11 +27,22 @@ public class Event {
     }
 
     public static class Builder {
-        private UUID id;
+        private int eventId = 0; // Varsayılan 0, DB atayınca değişir
+        private UUID uuid;
         private String name;
         private LocalDateTime dateTime;
         private String location;
         private final List<TicketCategory> categories = new ArrayList<>();
+
+        public Builder eventId(int eventId) {
+            this.eventId = eventId;
+            return this;
+        }
+
+        public Builder uuid(UUID uuid) {
+            this.uuid = uuid;
+            return this;
+        }
 
         public Builder name(String name) {
             this.name = name;
@@ -52,11 +64,6 @@ public class Event {
             return this;
         }
 
-        public Builder id(String id) {
-            this.id = UUID.fromString(id);
-            return this;
-        }
-
         public Event build() {
             if (name == null || dateTime == null || location == null) {
                 throw new IllegalStateException("Event must have name, dateTime, and location");
@@ -67,8 +74,12 @@ public class Event {
 
     // ─── Getters ────────────────────────────────────────────────────────────────
 
-    public UUID getId() {
-        return id;
+    public int getEventId() {
+        return eventId;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getName() {

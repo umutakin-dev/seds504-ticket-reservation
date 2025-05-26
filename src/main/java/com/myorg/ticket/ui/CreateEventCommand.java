@@ -1,4 +1,3 @@
-// src/main/java/com/myorg/ticket/ui/CreateEventCommand.java
 package com.myorg.ticket.ui;
 
 import com.myorg.ticket.model.Event;
@@ -43,8 +42,8 @@ public class CreateEventCommand implements Command {
             }
 
             var e = builder.build();
-            eventSvc.createEvent(e);
-            ui.println("Created event: " + e.getId());
+            var savedEvent = eventSvc.createEvent(e); // Kaydedilmiş event'i al
+            ui.println("Created event with ID: " + savedEvent.getEventId());
         } catch (Exception ex) {
             ui.println("Error creating event: " + ex.getMessage());
         }
